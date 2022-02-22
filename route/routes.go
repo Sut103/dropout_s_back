@@ -11,25 +11,14 @@ import (
 // Init ルーティング
 func Init(conn *gorm.DB) *gin.Engine {
 	r := gin.Default()
-
 	ctrler := controller.NewController(conn)
 
-	// BasicAuthの設定
-	ba := config.GetBAConfig()
-	accounts := gin.Accounts{
-		ba.User: ba.Pass,
-	}
-	authorized := r.Group("/", gin.BasicAuth(accounts))
-
-	api := authorized.Group("/api")
-	{
-		api.GET("/ble/get", ctrler.GetBle)
-		api.GET("/ble/getall", ctrler.GetBleAll)
-		api.GET("/message/get", ctrler.GetMessage)
-		api.POST("/user/signup", ctrler.SignUp)
-		api.POST("/message/post", ctrler.PostMessage)
-		api.GET("/user/get", ctrler.GetUsers)
-	}
+	r.GET("/ble/get", ctrler.GetBle)
+	r.GET("/ble/getall", ctrler.GetBleAll)
+	r.GET("/message/get", ctrler.GetMessage)
+	r.POST("/user/signup", ctrler.SignUp)
+	r.POST("/message/post", ctrler.PostMessage)
+	r.GET("/user/get", ctrler.GetUsers)
 
 	return r
 }
